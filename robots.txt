@@ -2,4 +2,4 @@ User-agent: *
 
 Allow: /
 
-Sitemap: https://rectly-app.github.io/Rectly/sitemap.xml
+Sitemap: https://rectly-app.github.io/sitemap.xml
