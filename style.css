@@ -1,0 +1,454 @@
+/* ========================================
+   1. CSS変数
+======================================== */
+
+:root {
+  /* 共通 */
+  --accent: #4f7cff;
+  --accent-hover: #6d93ff;
+
+  /* 標準テーマ */
+  --bg: #ececec;
+  --sidebar-bg: #d8d8d8;
+  --panel-bg: #f7f7f7;
+  --text: #222222;
+  --subtext: #666666;
+  --border: #bdbdbd;
+  --input-bg: #ffffff;
+}
+
+body.theme-default {
+  --bg: #ececec;
+  --sidebar-bg: #d8d8d8;
+  --panel-bg: #f7f7f7;
+  --text: #222222;
+  --subtext: #666666;
+  --border: #bdbdbd;
+  --input-bg: #ffffff;
+}
+
+body.theme-light {
+  --bg: #ffffff;
+  --sidebar-bg: #f5f5f5;
+  --panel-bg: #ffffff;
+  --text: #222222;
+--subtext: #666666;
+  --border: #d0d0d0;
+  --input-bg: #ffffff;
+}
+
+body.theme-dark {
+  --bg: #2b2b2b;
+  --sidebar-bg: #242424;
+  --panel-bg: #333333;
+  --text: #f0f0f0;
+  --subtext: #aaaaaa;
+  --border: #555555;
+  --input-bg: #3b3b3b;
+}
+
+
+/* ========================================
+   2. 全体レイアウト
+======================================== */
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.hidden {
+  display: none;
+}
+
+
+/* ========================================
+   3. サイドバー
+======================================== */
+
+.sidebar {
+  width: 270px;
+  min-width: 270px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+#logo {
+  width: 160px;
+  height: auto;
+}
+
+.section {
+  margin-bottom: 12px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #b5b5b5;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-bottom: 6px;
+}
+.section > * + * {
+  margin-top: 8px;
+}
+
+
+/* ========================================
+   4. フォーム共通
+======================================== */
+
+label {
+  display: block;
+  font-size: 11px;
+  color: var(--text);
+  margin-bottom: 3px;
+  letter-spacing: 0.5px;
+}
+label + select,
+label + input {
+  margin-top: 0 !important;
+}
+
+select,
+input[type="number"]{
+  background:var(--input-bg);
+  color:var(--text);
+  border:1px solid var(--border);
+  width: 100%;
+  padding: 6px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+input[type="file"] {
+  font-size: 13px;
+}
+
+input[type="range"],
+input[type="checkbox"] {
+  accent-color: #5b84e6;
+}
+
+
+/* ========================================
+   5. ボタン
+======================================== */
+
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background:var(--accent);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+button:hover {
+  background:var(--accent-hover);
+}
+
+.primary-button {
+  background: var(--accent);
+}
+.primary-button:hover {
+  background: var(--accent-hover);
+}
+
+.secondary-button {
+  background: #c6c6c6;
+  color: #222;
+}
+.secondary-button:hover {
+  background: #b8b8b8;
+}
+
+.action-row {
+  display: flex;
+  gap: 8px;
+}
+.action-row button {
+  flex: 1;
+  font-size: 12px;
+  padding: 8px;
+}
+
+.file-select-button {
+  width: 100%;
+  padding: 5px;
+
+  background: var(--input-bg);
+  color: var(--text);
+
+  border: 1px solid var(--border);
+  border-radius: 4px;
+
+  font-size: 13px;
+  cursor: pointer;
+}
+.file-select-button:hover {
+  background: var(--panel-bg);
+}
+
+
+/* ========================================
+   6. ファイル選択
+======================================== */
+
+#selectedFileName {
+  margin-top: 3px;
+
+  font-size: 11px;
+  color: var(--subtext);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-select-group {
+  margin-bottom: 10px;
+}
+
+/* ========================================
+   7. 出力設定エリア
+======================================== */
+
+.radio-row {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:3px !important;
+}
+.radio-row label {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:12px;
+  margin:0;
+}
+
+.custom-size-area {
+  margin-top: 10px;
+}
+
+
+/* ========================================
+   8. 表示設定エリア
+======================================== */
+
+.theme-selector {
+  display:flex;
+  gap:10px;
+  margin-top:4px;
+}
+.theme-selector label {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:12px;
+}
+
+.grid-toggle {
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.grid-settings {
+  margin-left: 14px;
+}
+
+
+/* ========================================
+   9. メイン領域
+======================================== */
+
+.main-content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: auto;
+  min-width: 0;
+
+  padding: 10px 12px 16px;
+}
+
+.canvas-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  align-items: flex-start;
+
+  flex: 1;
+}
+
+.canvas-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-header{
+  height:40px;
+  display:flex;
+  align-items:center;
+  padding:0 10px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius:6px;
+  font-size:13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom:8px;
+  box-sizing:border-box;
+}
+
+canvas {
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+  width: auto !important;
+  height: auto !important;
+  align-self: flex-start;
+}
+
+#canvas,
+#outputCanvas {
+  max-width: none;
+}
+
+
+/* ========================================
+   10. フッター
+======================================== */
+
+.app-footer {
+  flex-shrink: 0;
+
+  margin-top: 24px;
+  padding-top: 12px;
+  padding-bottom: 4px;
+
+  font-size: 11px;
+  color: var(--subtext);
+}
+
+.app-footer .footer-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.app-footer a {
+  color: var(--subtext);
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+.app-footer .separator {
+  color: var(--subtext);
+}
+
+
+/* ========================================
+   11. トースト通知
+======================================== */
+
+.toast {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 180px;
+
+  padding: 18px 20px;
+
+  background: rgba(255,255,255,.72);
+
+  color: #222;
+
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 14px;
+
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+
+  box-shadow: 0 12px 36px rgba(0,0,0,.15);
+
+  text-align: center;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity .25s,
+    visibility .25s;
+
+  pointer-events: none;
+
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast-check {
+  width: 38px;
+  height: 38px;
+
+  margin: 0 auto 10px;
+
+  border: 2px solid var(--accent);
+
+  border-radius: 50%;
+
+  color: var(--accent);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.toast-message {
+  font-size: 14px;
+}
+
+body.theme-dark .toast {
+  background: rgba(45,45,45,.72);
+  border: 1px solid rgba(255,255,255,.08);
+  color: #f0f0f0;
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="icons/favicon-32.png">
+    <title>四点補正ツール | Rectly</title>
+    <meta name="description"
+          content="Rectlyは、ブラウザだけで使える無料の四点補正ツールです。画像をサーバーへ送信せず、端末内だけで処理します。">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#ececec">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DGEX30W725"></script>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag("js", new Date());
+      gtag("config", "G-DGEX30W725");
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <div class="app-header">
+        <img src="images/rectly-logo.svg" id="logo">
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          画像
+        </div>
+        
+        <input
+          type="file"
+          id="fileInput"
+          hidden>
+
+        <button
+          type="button"
+          id="selectFileButton"
+          class="file-select-button">
+          画像を選択
+        </button>
+
+        <div id="selectedFileName">
+          未選択
+        </div>
+
+        <button class="primary-button"
+                onclick="autoDetectPoints()">
+          自動検出
+        </button>
+
+        <div class="action-row">
+          <button class="secondary-button"
+                  onclick="resetPoints()">
+            初期位置
+          </button>
+
+          <button class="secondary-button"
+                  onclick="undo()">
+            元に戻す
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          出力設定
+        </div>
+
+        <label>比率</label>
+        <select id="ratioSelect">
+          <option value="auto">自動</option>
+          <option value="1:1">1:1</option>
+          <option value="3:2">3:2</option>
+          <option value="4:3">4:3</option>
+          <option value="sqrt2">A/B判（A4・B5など）</option>
+          <option value="custom">任意サイズ</option>
+        </select>
+
+        <label>縦横</label>
+        <div class="radio-row" id="orientationGroup">
+          <label>
+            <input type="radio"
+                   name="orientation"
+                   value="auto"
+                   checked>
+            自動
+          </label>
+
+          <label>
+            <input type="radio"
+                   name="orientation"
+                   value="landscape">
+            横長
+          </label>
+
+          <label>
+            <input type="radio"
+                   name="orientation"
+                   value="portrait">
+            縦長
+          </label>
+        </div>
+
+        <div id="customSizeArea"
+             class="hidden custom-size-area">
+
+          <label>横</label>
+          <input
+            type="number"
+            id="customWidth"
+            min="1"
+            step="1">
+
+          <label>縦</label>
+          <input
+            type="number"
+            id="customHeight"
+            min="1"
+            step="1">
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          保存
+        </div>
+
+        <div class="radio-row">
+          <label>
+            <input type="radio"
+                   name="format"
+                   value="image/jpeg"
+                   checked>
+            JPG
+          </label>
+
+          <label>
+            <input type="radio"
+                   name="format"
+                   value="image/png">
+            PNG
+          </label>
+        </div>
+
+        <button onclick="downloadImage()">
+          保存
+        </button>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          表示
+        </div>
+
+        <label>テーマ</label>
+        <div class="theme-selector">
+          <label>
+            <input type="radio"
+                   name="theme"
+                   value="default"
+                   checked>
+            標準
+          </label>
+
+          <label>
+            <input type="radio"
+                   name="theme"
+                   value="light">
+            ライト
+          </label>
+
+          <label>
+            <input type="radio"
+                   name="theme"
+                   value="dark">
+            ダーク
+          </label>
+        </div>
+
+        <label>表示倍率（元画像）</label>
+        <select id="zoomSelect">
+          <option value="0.5">50%</option>
+          <option value="0.75">75%</option>
+          <option value="1" selected>100%</option>
+          <option value="1.5">150%</option>
+          <option value="2">200%</option>
+          <option value="3">300%</option>
+          <option value="4">400%</option>
+        </select>
+
+        <label class="grid-toggle">
+          ガイド線を表示
+          <input type="checkbox" id="gridToggle">
+        </label>
+        <div id="gridSettings"
+             class="grid-settings hidden">
+          <label>
+            線の濃さ
+          </label>
+          <input
+            type="range"
+            id="gridAlpha"
+            min="0.1"
+            max="1"
+            step="0.1"
+            value="0.2">
+
+          <label>
+            線の幅
+          </label>
+          <input
+            type="range"
+            id="gridWidth"
+            min="1"
+            max="3"
+            step="1"
+            value="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="canvas-container">
+        <div class="canvas-panel">
+          <div class="canvas-header" id="inputInfo">
+            元画像
+          </div>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="canvas-panel">
+          <div class="canvas-header" id="outputInfo">
+            補正結果
+          </div>
+          <canvas id="outputCanvas"></canvas>
+        </div>
+      </div>
+
+      <footer class="app-footer">
+        <div class="footer-links">
+          <span>© 2026 Rectly</span>
+          <span class="separator">｜</span>
+          <a href="about.html">About</a>
+          <span class="separator">・</span>
+          <a href="privacy.html">Privacy Policy</a>
+          <span class="separator">・</span>
+          <a href="terms.html">Terms of Use</a>
+          <span class="separator">・</span>
+
+          <a href="https://github.com/rectly-app/Rectly"
+             target="_blank"
+             rel="noopener noreferrer">
+            GitHub
+          </a>
+        </div>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast">
+
+      <div class="toast-check">
+        ✓
+      </div>
+
+      <div class="toast-message">
+        保存しました
+      </div>
+
+    </div>
+
+    <script>
+      var Module = {
+        locateFile: function(path) {
+          return './' + path;
+        },
+        onRuntimeInitialized() {
+          window.cvReady = true;
+          console.log("OpenCV ready");
+        }
+      };
+    </script>
+
+    <script src="./opencv.js"></script>
+    
+    <script src="app.js"></script>
+  </body>
+</html>
